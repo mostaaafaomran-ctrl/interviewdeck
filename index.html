@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>InterviewDeck | JS, React, SQL and Node interview flashcards with Arabic explanations</title>
+<meta name="description" content="42 open flashcards for JavaScript, React, SQL and Node interviews. Short English answers with Arabic explanations. Shuffle, filter, track what you know. Saved in your browser.">
+<meta property="og:title" content="InterviewDeck">
+<meta property="og:description" content="Flashcards for JS, React, SQL and Node interviews with Arabic explanations.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232540ff'/%3E%3Crect x='24' y='28' width='52' height='44' rx='8' fill='%23fff'/%3E%3Cpath d='M38 50h24' stroke='%232540ff' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--b:#2540ff;--b2:#1229c4;--w:#fff;--y:#ffe14a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);background-image:linear-gradient(160deg,#3a55ff,#1229c4);min-height:100vh;color:#fff;font:16px/1.5 "Inter","Segoe UI",Tahoma,system-ui,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:22px 16px 50px}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.logo{font:900 28px/1 "Arial Black",Impact,sans-serif;letter-spacing:-1px}.logo span{color:var(--y)}
+.pill{background:#ffffff22;border-radius:99px;padding:5px 14px;font-size:14px;font-weight:700}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.tabs button{background:#ffffff1f;color:#fff;border:2px solid transparent;border-radius:99px;padding:7px 16px;font:700 14px inherit;cursor:pointer}
+.tabs button.on{background:var(--y);color:#111}
+.stage{perspective:1400px;margin:10px 0}
+.card{position:relative;height:340px;cursor:pointer;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.card.flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:26px;padding:26px 28px;display:flex;flex-direction:column;box-shadow:0 22px 50px -18px #000a;overflow:auto}
+.front{background:#fff;color:#0c1a66}
+.back{background:#0c1a66;color:#fff;transform:rotateY(180deg);border:3px solid var(--y)}
+.tag{align-self:flex-start;font:800 12px system-ui;letter-spacing:2px;text-transform:uppercase;background:var(--b);color:#fff;padding:3px 12px;border-radius:99px}
+.back .tag{background:var(--y);color:#111}
+.q{margin:auto 0;font:800 clamp(22px,4.2vw,32px)/1.25 "Segoe UI",system-ui,sans-serif;text-wrap:balance}
+.hintt{font-size:13px;opacity:.6;margin-top:auto}
+.a{font-size:17px;margin:12px 0}
+.ar{border-top:1px dashed #ffffff66;padding-top:12px;font:18px/1.9 "Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif;direction:rtl;text-align:right;color:var(--y)}
+.ctl{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.ctl button{border:0;border-radius:14px;padding:12px 20px;font:800 15px inherit;cursor:pointer;background:#fff;color:#0c1a66}
+.ctl .ok{background:#35e08a;color:#05301a}.ctl .no{background:#ff8a7a;color:#4a0d05}
+.ctl button:active{transform:scale(.96)}
+.prog{height:8px;background:#ffffff33;border-radius:99px;margin:14px 0 4px;overflow:hidden}.prog i{display:block;height:100%;background:var(--y);width:0;transition:width .3s}
+.cap{font-size:13px;opacity:.8;display:flex;justify-content:space-between}
+.tools{display:flex;gap:10px;justify-content:center;margin-top:14px;font-size:13px}
+.tools button{background:none;border:0;color:#fff;opacity:.8;text-decoration:underline;cursor:pointer;font:inherit}
+footer{margin-top:30px;font-size:13px;opacity:.75;text-align:center}
+a{color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">Interview<span>Deck</span></div><div class="pill" id="score">0 known</div></header>
+<div class="tabs" id="tabs"></div>
+<div class="stage"><div class="card" id="card"><div class="face front"><span class="tag" id="t1"></span><div class="q" id="q"></div><div class="hintt">tap to flip · space to flip · arrows to move</div></div><div class="face back"><span class="tag" id="t2"></span><div class="a" id="a"></div><div class="ar" id="ar" dir="rtl"></div></div></div></div>
+<div class="prog"><i id="pg"></i></div><div class="cap"><span id="pos"></span><span id="rem"></span></div>
+<div class="ctl"><button id="prev">←</button><button class="no" id="no">Still learning</button><button class="ok" id="ok">I know it</button><button id="next">→</button></div>
+<div class="tools"><button id="sh">Shuffle</button><button id="rs">Reset progress</button></div>
+<footer>42 cards · MIT · <a href="https://github.com/mostaaafaomran-ctrl/interviewdeck">github.com/mostaaafaomran-ctrl/interviewdeck</a> · PRs with new cards welcome</footer>
+</div>
+<script src="cards.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const TOP={all:'All',js:'JavaScript',react:'React',sql:'SQL',node:'Node'};
+const C=window.CARDS.map((c,i)=>({id:i,t:c[0],q:c[1],a:c[2],ar:c[3]}));
+let known={};try{known=JSON.parse(localStorage.getItem('idk.known')||'{}')}catch(e){}
+let topic='all',order=[],i=0;
+const save=()=>{try{localStorage.setItem('idk.known',JSON.stringify(known))}catch(e){}};
+function build(shuffle){
+  order=C.filter(c=>topic==='all'||c.t===topic).map(c=>c.id);
+  if(shuffle)for(let k=order.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[order[k],order[j]]=[order[j],order[k]]}
+  i=0;show();
+}
+function show(){
+  const c=C[order[i]];$('card').classList.remove('flip');
+  $('t1').textContent=$('t2').textContent=TOP[c.t];$('q').textContent=c.q;$('a').textContent=c.a;$('ar').textContent=c.ar;
+  const k=order.filter(id=>known[id]).length;
+  $('pos').textContent='Card '+(i+1)+' of '+order.length;$('rem').textContent=k+' known in this deck';
+  $('pg').style.width=Math.round(100*k/order.length)+'%';
+  $('score').textContent=Object.keys(known).length+' / '+C.length+' known';
+}
+function go(d){i=(i+d+order.length)%order.length;show()}
+$('tabs').innerHTML=Object.keys(TOP).map(k=>'<button data-k="'+k+'"'+(k==='all'?' class="on"':'')+'>'+TOP[k]+'</button>').join('');
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;topic=b.dataset.k;document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));build(false)};
+$('card').onclick=()=>$('card').classList.toggle('flip');
+$('next').onclick=()=>go(1);$('prev').onclick=()=>go(-1);
+$('ok').onclick=()=>{known[order[i]]=1;save();go(1)};
+$('no').onclick=()=>{delete known[order[i]];save();go(1)};
+$('sh').onclick=()=>build(true);
+$('rs').onclick=()=>{known={};save();show()};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(1);else if(e.key==='ArrowLeft')go(-1);else if(e.key===' '){e.preventDefault();$('card').classList.toggle('flip')}});
+build(false);
+const q=new URLSearchParams(location.search);
+if(q.get('demo')==='1'){topic='js';i=5;order=C.filter(c=>c.t==='js').map(c=>c.id);document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x.dataset.k==='js'));[0,1,2].forEach(n=>known[order[n]]=1);show();setTimeout(()=>$('card').classList.add('flip'),50)}
+</script>
+</body>
+</html>
